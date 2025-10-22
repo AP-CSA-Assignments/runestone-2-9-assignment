@@ -20,107 +20,118 @@ java Main.java
 
 After you compile the shape classes, you only need to compile and run `Main.java` as usual.
 
-# Instructions  
+# Instructions
+
+## Preliminaries - Count a Letter
+The "counting" algorithm works like this:
+1. Create a "count" variable that keeps track of how many elements meet the condition.  Start this count at 0.
+2. Loop through your structure (`String`, list, etc.)
+3. Check if the current item (could be list element or character from a `String`) meets some condition.
+    - Equal to something
+    - Greater than something
+    - Less than something
+    - Some other condition
+4. If the element meets the condition, then increment the count.
+5. Return the count.
+
+As an example, to count how many letters in a `String` are equal to a `target` character, we can do so like this
+```java
+String word = "mississippi";
+
+String target = "s";
+int count = 0;
+for (int i = 0; i < word.length(); i++)
+{
+    String currentLetter = word.substring(i, i+1);
+    if (currentLetter.equals(target))
+    {
+        count++;
+    }
+}
+System.out.println("The letter " + target + " appears " + count + " times.");
+```
+
+## Preliminaries - Count Every Letter
+If I wanted to count _every_ letter in a `String`, I could wrap the above counting algorithm in _another_ `for` loop.  See the [example Snap! program](https://snap.berkeley.edu/snap/snap.html#present:Username=ktvu&ProjectName=CSA%20Runestone%202.9%20Letter%20Mode%20Example) for a block visualization of the algorithm.
+
+```java
+String word = "mississippi";
+
+for (int i = 0; i < word.length(); i++)
+{
+
+    /*********** This here is the "regular" counting algorithm *****/
+    String target = word.substring(i, i+1);
+    int count = 0;
+    for (int j = 0; j < word.length(); j++)
+    {
+        String currentLetter = word.substring(j, j+1);
+        if (currentLetter.equals(target))
+        {
+            count++;
+        }
+    }
+    System.out.println("The letter " + target + " appears " + count + " times.");
+    /***************************************************************/
+
+}
+```
+      
 
 ## Problem 1
-Ask the user for two numbers. Print only the odd numbers between them. You should also print the two numbers if they are odd.  You may assume that the first number entered is less than the second number entered.
+Using the counting algorithms above with other algorithms such as the "finding the maximum" algorithm, write a program that finds the letter that appears **most often** in a `String`.  If a word has multiple letters that appear the same number of times, just print out one of the letters.
 
-Sample Run 1:
+**Sample Output**
 ```
-Enter two numbers:
-2
-11
+Enter a word:
+calculator
 
-3 5 7 9 11
-```
-Sample Run 2:
-```
-Enter two numbers:
-10
-44
+The letter c appears the most times.
 
-11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43
-```
+Enter a word:
+boom
 
-## Problem 2
-Write a program which takes a positive `int` input from the user, then prints the digits of that number in reverse order.
-
-**Sample Run:**
-```
-Enter a positive integer:
-> 2587
-7
-8
-5
-2
-```
-
-## Problem 3
-Write a program which takes a positive int input from the user, then prints the digits of that number in their places. You should separate the digits using spaces of line breaks so they appear individually.
-
-Sample run:
-```
-Enter a positive integer:
-> 2587
-7
-80
-500
-2000
+The letter o appears the most times.
 ```
 
 ## Sample Solutions
 ```java
 Scanner sc = new Scanner(System.in);
 
-// Problem 1
-int a;
-int b;
+System.out.println("Enter a word");
+String word = sc.nextLine();
 
-System.out.println("Enter two numbers:");
-a = sc.nextInt();
-b = sc.nextInt();
+int maxCount = 0;  // I can start at 0 since the number of times a letter can appear is at least 1
+String maxLetter = "";
 
-while (a <= b)
+for (int i = 0; i < word.length(); i++)  // loop through to check all the letters
 {
-  if (a % 2 == 1)
-  {
-    System.out.print(a + " ");
-  }
-  a++;
+
+    /*********** Count how many times a letter appears in the word *****/
+    String target = word.substring(i, i+1);
+    int count = 0;
+    for (int j = 0; j < word.length(); j++)
+    {
+        String currentLetter = word.substring(j, j+1);
+        if (currentLetter.equals(target))
+        {
+            count++;
+        }
+    }
+    System.out.println("The letter " + target + " appears " + count + " times.");
+    /***************************************************************/
+    
+    
+    // Check if the current count is the maximum count
+    // Update maximum values accordingly
+    if (count > maxCount)
+    {
+        maxCount = count;
+        maxLetter = target;
+    }
 }
 
-// Problem 2
-System.out.print("Enter a positive integer:\n> ");
-int num = sc.nextInt();
-while (num > 0)
-{
-  int last_digit = num % 10;
-  System.out.println(last_digit);
-
-  num /= 10;
-}
-
-// Problem 3
-int N;
-int degree = 0;
-
-System.out.print("Enter a positive integer:\n> ");
-N = sc.nextInt();
-
-while (N > 0)
-{
-  // These two lines are the
-  // "print every digit" algorithm
-  int last_digit = N % 10;
-  N /= 10;
-
-  // note that pow always returns a double, so it needs
-  // to be stored in a double
-  double place_value = Math.pow(10, degree);
-  System.out.println(last_digit * place_value);
-  
-  degree++;  // 1's place → 10's place; 10's place → 100's place, and so on
-}
+System.out.println("The letter " + maxLetter + " appears the most times at " + maxCount + " times.");
 
 sc.close();
 ```
